@@ -1,0 +1,21 @@
+public function search(Request $request)
+    {
+        $query = User::query();
+        $search1 = $request->input('strength');
+        $search2 = $request->input('tactics');
+        $search3 = $request->input('name');
+        if ($request->has('strength') && $search1 != ('指定なし')) {
+            $query->where('strength', $search1)->get();
+        }
+        if ($request->has('tactics') && $search2 != ('指定なし')) {
+            $query->where('tactics', $search2)->get();
+        }
+        if ($request->has('name') && $search3 != '') {
+            $query->where('name', 'like', '%'.$search3.'%')->get();
+        }
+        $data = $query->paginate(10);
+
+        return view('users.search',[
+            'data' => $data
+        ]);
+    }
